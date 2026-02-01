@@ -1,5 +1,10 @@
 #include<stdio.h>
 
 int main(){
-	println("Hello World!");
+
+	int number;
+	printf("compiler running....\n");
+	scanf("%d", &number);
+	printf("Your number is %d", number);
+	printf("\n");
 }
