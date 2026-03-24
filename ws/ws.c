@@ -5,7 +5,8 @@
 int main(int argc, char *argv[]){
 	int numArgs = argc -1;
 	char* search = argv[1];
-	char url[]= "xdg-open https://duckduckgo.com/?q=";
+	char url[]= "lynx https://duckduckgo.com/?q=";
+	int i;
 	if( numArgs > 1)
 	{
 		printf("too many arguments....\n");
@@ -13,10 +14,16 @@ int main(int argc, char *argv[]){
 	}
 	if(numArgs == 0)
 	{
-		system("xdg-open https://duckduckgo.com/?q=");
+		system(url);
 		return 0;
 	}
+	for(i=0; i<= strlen(search); i++){
+		if (search[i]== ' '){
+			search[i]='+';
+		}
+	}
 	strcat(url, search);
+	printf("%s\n", url);
 	system(url);
-	return 0;
+	exit(1);
 }
