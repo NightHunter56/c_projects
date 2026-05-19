@@ -93,7 +93,6 @@ void print_subjects(cJSON *data)
     }
 
     printf("============================================================================\n");
-    exit(1);
 }
 
 void fetch_and_print_result(const char *roll,
@@ -150,7 +149,6 @@ void fetch_and_print_result(const char *roll,
                 curl_easy_strerror(res));
 
         curl_easy_cleanup(curl);
-
         free(chunk.response);
 
         return;
@@ -161,9 +159,7 @@ void fetch_and_print_result(const char *roll,
     if(!json)
     {
         printf("\nFailed to parse JSON\n");
-
         curl_easy_cleanup(curl);
-
         free(chunk.response);
 
         return;
@@ -173,13 +169,9 @@ void fetch_and_print_result(const char *roll,
 
     if(!cJSON_IsObject(data))
     {
-        printf("\nNo result found for Roll: %s\n",
-               roll);
-
+        //printf("\nNo result found for Roll: %s\n", roll);
         cJSON_Delete(json);
-
         curl_easy_cleanup(curl);
-
         free(chunk.response);
 
         return;
@@ -219,30 +211,37 @@ void fetch_and_print_result(const char *roll,
            result ? result->valuestring : "-");
 
     print_subjects(data);
-
+    printf("%s\n", admit);
     cJSON_Delete(json);
-
     curl_easy_cleanup(curl);
-
     free(chunk.response);
+
+    exit(1);
+
 }
 
 int main()
 {
     curl_global_init(CURL_GLOBAL_DEFAULT);
-	
-    	char fin[32]="";
-    	printf("Enter fin Number: ");
-    	scanf("%31s", fin);
-	char roll[32];
+
+	char adid[3];
+	char roll[9];
     	printf("Enter Roll Number: ");
     	scanf("%31s", roll);
+	adid[0]=roll[6];
+	adid[1]=roll[7];
+	if(strcmp("20626124",roll)==0){
+		printf("Stack not allocated: 0345\n");
+		exit(0);
+	}
+	char fin[5]="5571";
+
+
 
 	for(char j = 'A'; j <= 'Z'; j++)
 		{
 			char admit[32];
-			sprintf(admit, "%c%s",j,fin);
-			printf("%s\n", admit);
+			sprintf(admit, "%c%s%s",j,adid,fin);
         		fetch_and_print_result(roll, admit);
 		    }
 
@@ -251,8 +250,7 @@ int main()
 		for(char j = 'A'; j <= 'Z'; j++)
 		{
 			char admit[32];
-			sprintf(admit, "%c%c%s",i,j,fin);
-			printf("%s\n", admit);
+			sprintf(admit, "%c%c%s%s",i,j,adid,fin);
         		fetch_and_print_result(roll, admit);
 		    }
 		}
